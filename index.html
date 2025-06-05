@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Calculadora de Horas de Sueño</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            color: #4a90e2;
+        }
+        label, input {
+            display: block;
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        button {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #357ABD;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #222;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Horas de Sueño</h1>
+
+    <label for="sleepTime">Hora a la que te fuiste a dormir:</label>
+    <input type="time" id="sleepTime" required />
+
+    <label for="wakeTime">Hora a la que despertaste:</label>
+    <input type="time" id="wakeTime" required />
+
+    <button onclick="calcularHoras()">Calcular horas de sueño</button>
+
+    <div class="result" id="resultado"></div>
+
+    <script>
+        function calcularHoras() {
+            const sleepTime = document.getElementById('sleepTime').value;
+            const wakeTime = document.getElementById('wakeTime').value;
+            if (!sleepTime || !wakeTime) {
+                alert('Por favor, ingresa ambas horas.');
+                return;
+            }
+
+            // Convierte las horas a minutos desde medianoche
+            const [sleepH, sleepM] = sleepTime.split(':').map(Number);
+            const [wakeH, wakeM] = wakeTime.split(':').map(Number);
+
+            let sleepMinutes = sleepH * 60 + sleepM;
+            let wakeMinutes = wakeH * 60 + wakeM;
+
+            // Si despertaste al día siguiente (hora menor que la de dormir)
+            if (wakeMinutes <= sleepMinutes) {
+                wakeMinutes += 24 * 60;
+            }
+
+            const diffMinutes = wakeMinutes - sleepMinutes;
+            const hours = Math.floor(diffMinutes / 60);
+            const minutes = diffMinutes % 60;
+
+            document.getElementById('resultado').textContent = 
+                `Has dormido ${hours} hora(s) y ${minutes} minuto(s).`;
+        }
+    </script>
+</body>
+</html>
